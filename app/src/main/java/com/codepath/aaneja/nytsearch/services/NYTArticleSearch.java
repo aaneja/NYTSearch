@@ -1,13 +1,11 @@
 package com.codepath.aaneja.nytsearch.services;
 
-import com.codepath.aaneja.nytsearch.models.Article;
 import com.codepath.aaneja.nytsearch.models.ArticleSearchResponse;
 import com.codepath.aaneja.nytsearch.models.Doc;
 import com.codepath.aaneja.nytsearch.models.SearchParams;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,8 +21,8 @@ import okhttp3.Response;
 
 public class NYTArticleSearch {
 
-    public static final String DeveloperKey = "786fe47ff99f463e92dd0595ac70a308";
-    public static final Gson GSON = new Gson();
+    private static final String DeveloperKey = "786fe47ff99f463e92dd0595ac70a308";
+    private static final Gson GSON = new Gson();
     private OkHttpClient Client = new OkHttpClient();
 
     public List<Doc> GetArticles(SearchParams searchParams) throws IOException, JSONException {
