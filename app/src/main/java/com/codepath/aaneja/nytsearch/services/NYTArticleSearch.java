@@ -1,6 +1,9 @@
 package com.codepath.aaneja.nytsearch.services;
 
 import com.codepath.aaneja.nytsearch.models.Article;
+import com.codepath.aaneja.nytsearch.models.ArticleSearchResponse;
+import com.codepath.aaneja.nytsearch.models.Doc;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +25,7 @@ public class NYTArticleSearch {
     public static final String DeveloperKey = "786fe47ff99f463e92dd0595ac70a308";
     private OkHttpClient Client = new OkHttpClient();
 
-    public List<Article> GetArticles(String searchTerm) throws IOException, JSONException {
+    public List<Doc> GetArticles(String searchTerm) throws IOException, JSONException {
         HttpUrl.Builder urlBuilder = HttpUrl.parse("https://api.nytimes.com/svc/search/v2/articlesearch.json").newBuilder();
         urlBuilder.addQueryParameter("api-key", DeveloperKey);
         urlBuilder.addQueryParameter("q", searchTerm);
@@ -32,9 +35,7 @@ public class NYTArticleSearch {
                 .url(url)
                 .build();
 
-        Response response = null;
-
-        response = Client.newCall(request).execute();
+        Response response = Client.newCall(request).execute();
         if (!response.isSuccessful()) {
             throw new IOException("Unexpected code " + response);
         }
@@ -42,10 +43,10 @@ public class NYTArticleSearch {
         return HydrateIntoResults(response);
     }
 
-    private List<Article> HydrateIntoResults(Response response) throws JSONException, IOException {
-        String responseData = response.body().string();
-        JSONObject json = new JSONObject(responseData);
-        final String owner = json.getString("name");
+    private List<Doc> HydrateIntoResults(Response response) throws JSONException, IOException {
+        final Gson gson = new Gson();
+        ArticleSearchResponse parsedResponse = gson.fromJson(response.body().charStream(), ArticleSearchResponse.class);
+        return parsedResponse.response.docs;
     }
 
 }

@@ -6,11 +6,11 @@ package com.codepath.aaneja.nytsearch.models;
 
 public class Article {
 
-    public String FullUrl;
-    public String Snippet;
-    public String SectionName;
+    public String web_url;
+    public String snippet;
+    public String news_desk;
 
-    public Multimedia[] Multimedia;
+    public Multimedia[] multimedia;
 
 }
 
