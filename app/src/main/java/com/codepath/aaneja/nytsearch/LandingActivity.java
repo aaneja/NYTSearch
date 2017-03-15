@@ -6,10 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 
 import com.codepath.aaneja.nytsearch.adapters.DocAdapter;
 import com.codepath.aaneja.nytsearch.models.Doc;
+import com.codepath.aaneja.nytsearch.models.SearchParams;
 import com.codepath.aaneja.nytsearch.services.NYTArticleSearch;
 import com.google.gson.Gson;
 
@@ -25,14 +27,23 @@ public class LandingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
-        AsyncTask<Context, Integer, DocAdapter> asyncTask = new AsyncTask<Context, Integer, DocAdapter>() {
+        AsyncTask<SearchParams, Integer, DocAdapter> asyncTask = new AsyncTask<SearchParams, Integer, DocAdapter>() {
+
+            private final NYTArticleSearch nytArticleSearch = new NYTArticleSearch();
+            private final RecyclerView rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
+
             @Override
-            protected DocAdapter doInBackground(Context... params) {
-                NYTArticleSearch nytArticleSearch = new NYTArticleSearch();
+            protected DocAdapter doInBackground(SearchParams... searchItem) {
+
+                if (searchItem.length != 1)
+                {
+                    //throw new Exception("params must have exactly one item");
+                }
+
                 List<Doc> searchedDocs = null;
                 try {
-                    searchedDocs = nytArticleSearch.GetArticles("india");
-                    Log.i("FETCHED SUCCESFULLY", String.valueOf(searchedDocs.size()));
+                    searchedDocs = nytArticleSearch.GetArticles(searchItem[0]);
+                    Log.i("FETCHED SUCCESSFULLY", String.valueOf(searchedDocs.size()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -44,11 +55,14 @@ public class LandingActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(DocAdapter docAdapter) {
-                RecyclerView rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
                 rvArticles.setAdapter(docAdapter);
-                rvArticles.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                rvArticles.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
             }
         };
-        asyncTask.execute();
+
+        SearchParams searchParams = new SearchParams();
+        searchParams.SearchTerm = "food";
+        asyncTask.execute(searchParams);
+
     }
 }
