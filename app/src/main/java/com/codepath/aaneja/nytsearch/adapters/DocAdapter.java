@@ -46,7 +46,8 @@ public class DocAdapter extends  RecyclerView.Adapter<DocAdapter.ViewHolder> {
         Doc doc = FetchedArticles.get(position);
 
         holder.snippet.setText(doc.snippet);
-        Picasso.with(holder.context).load(doc.getLandingViewImageUrl()).fit().centerCrop().into(holder.thumbnail);
+        //TODO: Figure out which way of getting context is better
+        Picasso.with(holder.thumbnail.getContext()).load(doc.getLandingViewImageUrl()).fit().centerCrop().into(holder.thumbnail);
 
     }
 

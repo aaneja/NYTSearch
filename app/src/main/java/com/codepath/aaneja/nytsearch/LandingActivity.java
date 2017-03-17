@@ -32,13 +32,6 @@ public class LandingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
-        Picasso.Builder builder = new Picasso.Builder(this);
-        builder.listener(new Picasso.Listener() {
-            @Override
-            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
-                exception.printStackTrace();
-            }});
-        Picasso.with(this).setLoggingEnabled(true);
         AsyncTask<SearchParams, Integer, List<Doc>> updateSearchedDocsTask = new AsyncTask<SearchParams, Integer, List<Doc>>() {
 
             private final NYTArticleSearch nytArticleSearch = new NYTArticleSearch();
@@ -72,8 +65,7 @@ public class LandingActivity extends AppCompatActivity {
 
         RecyclerView rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
         rvArticles.setAdapter(docAdapter);
-//        rvArticles.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
-        rvArticles.setLayoutManager(new LinearLayoutManager(this));
+        rvArticles.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
 
         SearchParams searchParams = new SearchParams();
         searchParams.SearchTerm = "food";

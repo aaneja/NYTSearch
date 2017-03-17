@@ -80,14 +80,12 @@ public class Doc {
         for (Multimedium item: multimedia) {
             switch (item.subtype) {
                 case "thumbnail" :
-                    Log.i("IMAGE/THUMBNAIL",item.url);
                     return NYTimesBaseUrl+item.url;
                 case "wide" :
                     returnUrl = NYTimesBaseUrl+item.url;
                     break;
             }
         }
-        Log.i("IMAGE",returnUrl);
         return returnUrl;
     }
 
