@@ -1,8 +1,10 @@
 package com.codepath.aaneja.nytsearch;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -11,6 +13,7 @@ import com.codepath.aaneja.nytsearch.adapters.DocAdapter;
 import com.codepath.aaneja.nytsearch.models.Doc;
 import com.codepath.aaneja.nytsearch.models.SearchParams;
 import com.codepath.aaneja.nytsearch.services.NYTArticleSearch;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 
@@ -29,7 +32,13 @@ public class LandingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
-
+        Picasso.Builder builder = new Picasso.Builder(this);
+        builder.listener(new Picasso.Listener() {
+            @Override
+            public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                exception.printStackTrace();
+            }});
+        Picasso.with(this).setLoggingEnabled(true);
         AsyncTask<SearchParams, Integer, List<Doc>> updateSearchedDocsTask = new AsyncTask<SearchParams, Integer, List<Doc>>() {
 
             private final NYTArticleSearch nytArticleSearch = new NYTArticleSearch();
@@ -63,7 +72,8 @@ public class LandingActivity extends AppCompatActivity {
 
         RecyclerView rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
         rvArticles.setAdapter(docAdapter);
-        rvArticles.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+//        rvArticles.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        rvArticles.setLayoutManager(new LinearLayoutManager(this));
 
         SearchParams searchParams = new SearchParams();
         searchParams.SearchTerm = "food";

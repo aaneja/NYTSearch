@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.codepath.aaneja.nytsearch.R;
 import com.codepath.aaneja.nytsearch.models.Doc;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class DocAdapter extends  RecyclerView.Adapter<DocAdapter.ViewHolder> {
         View articleView = inflater.inflate(R.layout.layout_article, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(articleView);
+        ViewHolder viewHolder = new ViewHolder(articleView, context);
         return viewHolder;
     }
 
@@ -45,7 +46,8 @@ public class DocAdapter extends  RecyclerView.Adapter<DocAdapter.ViewHolder> {
         Doc doc = FetchedArticles.get(position);
 
         holder.snippet.setText(doc.snippet);
-        //set thumbnail here too
+        Picasso.with(holder.context).load(doc.getLandingViewImageUrl()).fit().centerCrop().into(holder.thumbnail);
+
     }
 
     @Override
@@ -55,15 +57,16 @@ public class DocAdapter extends  RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
     public class ViewHolder  extends RecyclerView.ViewHolder {
 
-        public ImageView thumbnail;
+        private final Context context;
+        private ImageView thumbnail;
         private TextView snippet;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, Context context) {
             super(itemView);
 
             thumbnail = (ImageView) itemView.findViewById(R.id.ivThumbnail);
             snippet = (TextView) itemView.findViewById(R.id.tvSnippet);
-
+            this.context = context;
         }
 
     }
