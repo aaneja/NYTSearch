@@ -6,6 +6,9 @@ import java.util.Date;
  * Created by aaneja on 15/03/17.
  */
 public class SearchParams {
-    public String SearchTerm;
+    public int Page = 0;
+    public boolean AppendToResults = false;
+
+    public String SearchTerm = "";
     public Date Start;
 }

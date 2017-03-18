@@ -35,9 +35,20 @@ public class LandingActivity extends AppCompatActivity {
 
         RecyclerView rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
         rvArticles.setAdapter(docAdapter);
-        rvArticles.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        rvArticles.setLayoutManager(layoutManager);
 
         getSearchDocsUpdateTask().execute(searchParams);
+
+        rvArticles.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Log.i("SCROLLTONEWPAGE", String.valueOf(page));
+                searchParams.Page = page;
+                searchParams.AppendToResults = true;
+                getSearchDocsUpdateTask().execute(searchParams);
+            }
+        });
 
     }
 
@@ -45,6 +56,7 @@ public class LandingActivity extends AppCompatActivity {
     private AsyncTask<SearchParams, Integer, List<Doc>> getSearchDocsUpdateTask() {
         return new AsyncTask<SearchParams, Integer, List<Doc>>() {
 
+            private boolean AppendToResults;
             private final NYTArticleSearch nytArticleSearch = new NYTArticleSearch();
 
             @Override
@@ -54,6 +66,8 @@ public class LandingActivity extends AppCompatActivity {
                 {
                     //throw new Exception("params must have exactly one item");
                 }
+
+                this.AppendToResults = searchItem[0].AppendToResults;
 
                 List searchedDocsNew = Collections.EMPTY_LIST;
                 try {
@@ -68,16 +82,35 @@ public class LandingActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(List<Doc> newResults) {
-                searchedDocs.clear();
-                searchedDocs.addAll(newResults);
-                docAdapter.notifyDataSetChanged();
+                if(AppendToResults) {
+                    int beforeAddNewCount = searchedDocs.size();
+                    searchedDocs.addAll(newResults);
+                    Log.i("NEW_ITEMS/APPENDING", String.valueOf(newResults.size()));
+                    docAdapter.notifyItemRangeInserted(beforeAddNewCount, newResults.size());
+                }
+                else {
+                    searchedDocs.clear();
+                    searchedDocs.addAll(newResults);
+                    Log.i("NEW_ITEMS/CLEAR_SET", String.valueOf(newResults.size()));
+                    docAdapter.notifyDataSetChanged();
+                }
             }
         };
     }
 
     public void onSearchButtonClick(View view) {
         EditText etSearch = (EditText) findViewById(R.id.etSearch);
-        searchParams.SearchTerm =  etSearch.getText().toString();
+        String newSearchTerm =  etSearch.getText().toString();
+        if(newSearchTerm.compareToIgnoreCase(searchParams.SearchTerm) == 0) {
+            //Same search again, do nothing
+            return;
+        }
+
+        //Begin a new search for this new term
+        searchParams.Page = 0;
+        searchParams.AppendToResults = false;
+        searchParams.SearchTerm = newSearchTerm;
+
         getSearchDocsUpdateTask().execute(searchParams);
     }
 }

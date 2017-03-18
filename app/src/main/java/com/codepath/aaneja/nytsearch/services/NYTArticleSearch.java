@@ -30,9 +30,10 @@ public class NYTArticleSearch {
         urlBuilder.addQueryParameter("api-key", DeveloperKey);
 
         if(searchParams !=null)  {
-            if(searchParams.SearchTerm !=null) {
+            if(searchParams.SearchTerm !=null && searchParams.SearchTerm != "") {
                 urlBuilder.addQueryParameter("q", searchParams.SearchTerm);
             }
+            urlBuilder.addQueryParameter("page", String.valueOf(searchParams.Page));
         }
 
         String url = urlBuilder.build().toString();
