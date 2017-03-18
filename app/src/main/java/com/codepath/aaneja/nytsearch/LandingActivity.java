@@ -27,20 +27,21 @@ public class LandingActivity extends AppCompatActivity {
     private List<Doc> searchedDocs = new ArrayList<>(10);
     private DocAdapter docAdapter = new  DocAdapter(searchedDocs);
     private SearchParams searchParams = new SearchParams();
+    private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
-        RecyclerView rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
+        RecyclerView rvArticles =  (RecyclerView) findViewById(R.id.rvArticles);
         rvArticles.setAdapter(docAdapter);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         rvArticles.setLayoutManager(layoutManager);
 
         getSearchDocsUpdateTask().execute(searchParams);
 
-        rvArticles.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+        endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 Log.i("SCROLLTONEWPAGE", String.valueOf(page));
@@ -48,7 +49,8 @@ public class LandingActivity extends AppCompatActivity {
                 searchParams.AppendToResults = true;
                 getSearchDocsUpdateTask().execute(searchParams);
             }
-        });
+        };
+        rvArticles.addOnScrollListener(endlessRecyclerViewScrollListener);
 
     }
 
@@ -89,6 +91,7 @@ public class LandingActivity extends AppCompatActivity {
                     docAdapter.notifyItemRangeInserted(beforeAddNewCount, newResults.size());
                 }
                 else {
+                    endlessRecyclerViewScrollListener.resetState();
                     searchedDocs.clear();
                     searchedDocs.addAll(newResults);
                     Log.i("NEW_ITEMS/CLEAR_SET", String.valueOf(newResults.size()));
@@ -107,6 +110,7 @@ public class LandingActivity extends AppCompatActivity {
         }
 
         //Begin a new search for this new term
+        endlessRecyclerViewScrollListener.resetState();
         searchParams.Page = 0;
         searchParams.AppendToResults = false;
         searchParams.SearchTerm = newSearchTerm;
