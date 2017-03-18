@@ -34,6 +34,7 @@ public class LandingActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_landing,menu);
+        return true;
     }
 
     @Override
