@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -28,6 +30,31 @@ public class LandingActivity extends AppCompatActivity {
     private DocAdapter docAdapter = new  DocAdapter(searchedDocs);
     private SearchParams searchParams = new SearchParams();
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_landing,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.miSearchFilters:
+                createSeachFilterDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void createSeachFilterDialog() {
+
+    }
+
+    private void setSearchFiltersAndApply() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,4 +144,6 @@ public class LandingActivity extends AppCompatActivity {
 
         getSearchDocsUpdateTask().execute(searchParams);
     }
+
+
 }
