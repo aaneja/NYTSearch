@@ -1,19 +1,19 @@
 package com.codepath.aaneja.nytsearch;
 
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
 import com.codepath.aaneja.nytsearch.adapters.DocAdapter;
 import com.codepath.aaneja.nytsearch.models.Doc;
 import com.codepath.aaneja.nytsearch.models.SearchParams;
 import com.codepath.aaneja.nytsearch.services.NYTArticleSearch;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 
@@ -26,13 +26,24 @@ public class LandingActivity extends AppCompatActivity {
 
     private List<Doc> searchedDocs = new ArrayList<>(10);
     private DocAdapter docAdapter = new  DocAdapter(searchedDocs);
+    private SearchParams searchParams = new SearchParams();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
-        AsyncTask<SearchParams, Integer, List<Doc>> updateSearchedDocsTask = new AsyncTask<SearchParams, Integer, List<Doc>>() {
+        RecyclerView rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
+        rvArticles.setAdapter(docAdapter);
+        rvArticles.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+
+        getSearchDocsUpdateTask().execute(searchParams);
+
+    }
+
+    @NonNull
+    private AsyncTask<SearchParams, Integer, List<Doc>> getSearchDocsUpdateTask() {
+        return new AsyncTask<SearchParams, Integer, List<Doc>>() {
 
             private final NYTArticleSearch nytArticleSearch = new NYTArticleSearch();
 
@@ -62,14 +73,11 @@ public class LandingActivity extends AppCompatActivity {
                 docAdapter.notifyDataSetChanged();
             }
         };
+    }
 
-        RecyclerView rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
-        rvArticles.setAdapter(docAdapter);
-        rvArticles.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
-
-        SearchParams searchParams = new SearchParams();
-        searchParams.SearchTerm = "food";
-        updateSearchedDocsTask.execute(searchParams);
-
+    public void onSearchButtonClick(View view) {
+        EditText etSearch = (EditText) findViewById(R.id.etSearch);
+        searchParams.SearchTerm =  etSearch.getText().toString();
+        getSearchDocsUpdateTask().execute(searchParams);
     }
 }

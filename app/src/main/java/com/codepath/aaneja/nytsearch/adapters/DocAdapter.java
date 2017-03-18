@@ -26,6 +26,7 @@ public class DocAdapter extends  RecyclerView.Adapter<DocAdapter.ViewHolder> {
 
     public DocAdapter(List<Doc> fetchedArticles) {
         FetchedArticles = fetchedArticles;
+
     }
 
     @Override
