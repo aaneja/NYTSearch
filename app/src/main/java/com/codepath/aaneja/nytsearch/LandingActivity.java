@@ -1,9 +1,11 @@
 package com.codepath.aaneja.nytsearch;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.codepath.aaneja.nytsearch.adapters.DocAdapter;
+import com.codepath.aaneja.nytsearch.helpers.ItemClickSupport;
 import com.codepath.aaneja.nytsearch.models.Doc;
 import com.codepath.aaneja.nytsearch.models.SearchParams;
 import com.codepath.aaneja.nytsearch.services.NYTArticleSearch;
@@ -87,6 +90,21 @@ public class LandingActivity extends AppCompatActivity implements SetSearchFilte
                 getSearchDocsUpdateTask().execute(searchParams);
             }
         };
+
+        ItemClickSupport.addTo(rvArticles).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                // Use a CustomTabsIntent.Builder to configure CustomTabsIntent.
+                String url = searchedDocs.get(position).webUrl;
+                CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                // set toolbar color and/or setting custom actions before invoking build()
+                // Once ready, call CustomTabsIntent.Builder.build() to create a CustomTabsIntent
+                CustomTabsIntent customTabsIntent = builder.build();
+                // and launch the desired Url with CustomTabsIntent.launchUrl()
+                customTabsIntent.launchUrl(v.getContext(), Uri.parse(url));
+            }
+        });
+
         rvArticles.addOnScrollListener(endlessRecyclerViewScrollListener);
 
     }
