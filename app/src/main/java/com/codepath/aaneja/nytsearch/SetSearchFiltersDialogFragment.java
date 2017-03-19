@@ -3,6 +3,7 @@ package com.codepath.aaneja.nytsearch;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -131,7 +132,8 @@ public class SetSearchFiltersDialogFragment extends DialogFragment  {
         try {
             searchParams.BeginDate = displayDateFormat.parse(etBeginDate.getText().toString());
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.w("SEARCHPARAMS/Date",e.getMessage());
+            searchParams.BeginDate = null;
         }
 
         //Set the sortOrder if it's not 'None'
