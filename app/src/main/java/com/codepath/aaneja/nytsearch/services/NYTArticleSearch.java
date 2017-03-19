@@ -43,13 +43,13 @@ public class NYTArticleSearch {
             if(!Objects.equals(searchParams.SortOrder, "")) {
                 urlBuilder.addQueryParameter("sort",searchParams.SortOrder);
             }
-            if(searchParams.NewsDeskValues!= null) {
+            if(searchParams.NewsDeskValues!= null && searchParams.NewsDeskValues.size() > 0) {
                 String combinedSearchInnerTerm = "";
                 for (String item :
                         searchParams.NewsDeskValues) {
-                    combinedSearchInnerTerm += " " + item;
+                    combinedSearchInnerTerm += String.format(" \"%s\"",item);
                 }
-                urlBuilder.addQueryParameter("fq",String.format("news_desk:({%s})",combinedSearchInnerTerm));
+                urlBuilder.addQueryParameter("fq",String.format("news_desk:(%s)",combinedSearchInnerTerm));
             }
             if(searchParams.BeginDate != null) {
                 urlBuilder.addQueryParameter("begin_date", dateFormat.format(searchParams.BeginDate));

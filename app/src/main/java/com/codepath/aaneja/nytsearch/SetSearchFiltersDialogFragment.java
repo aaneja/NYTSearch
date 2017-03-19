@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -15,6 +16,7 @@ import com.codepath.aaneja.nytsearch.models.SearchParams;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 /**
  * Created by aaneja on 18/03/17.
@@ -27,6 +29,9 @@ public class SetSearchFiltersDialogFragment extends DialogFragment  {
     private SearchParams searchParams;
     private EditText etBeginDate;
     private Spinner spinnerSortOrder;
+    private CheckBox checkBoxArts;
+    private CheckBox checkBoxFashion;
+    private CheckBox checkBoxSports;
 
     public SetSearchFiltersDialogFragment() {
     }
@@ -66,7 +71,6 @@ public class SetSearchFiltersDialogFragment extends DialogFragment  {
 
     private void SetViewUsingSearchParams(View view) {
         etBeginDate = (EditText) view.findViewById(R.id.etBeginDate);
-
         if(searchParams.BeginDate != null) {
             etBeginDate.setText(displayDateFormat.format(searchParams.BeginDate));
         }
@@ -84,6 +88,27 @@ public class SetSearchFiltersDialogFragment extends DialogFragment  {
                 spinnerSortOrder.setSelection(position);
             }
         }
+
+        checkBoxArts = (CheckBox) view.findViewById(R.id.checkBoxArts);
+        checkBoxFashion = (CheckBox) view.findViewById(R.id.checkBoxFashion);
+        checkBoxSports = (CheckBox) view.findViewById(R.id.checkBoxSports);
+        if(searchParams.NewsDeskValues!= null && searchParams.NewsDeskValues.size() > 0) {
+            for (String newsDeskItem :
+                    searchParams.NewsDeskValues) {
+                switch (newsDeskItem) {
+                    case "Arts" :
+                        checkBoxArts.setChecked(true);
+                        break;
+                    case "Fashion" :
+                        checkBoxFashion.setChecked(true);
+                        break;
+                    case "Sports" :
+                        checkBoxSports.setChecked(true);
+                        break;
+                }
+            }
+        }
+
 
     }
 
@@ -121,6 +146,19 @@ public class SetSearchFiltersDialogFragment extends DialogFragment  {
             case "Newest" :
                 searchParams.SortOrder = "newest";
         }
+
+        //Set the NewsDesk values
+        searchParams.NewsDeskValues = new ArrayList<>(3); //We always clear the existing items to be safe
+        if(checkBoxArts.isChecked()) {
+            searchParams.NewsDeskValues.add("Arts");
+        }
+        if(checkBoxFashion.isChecked()) {
+            searchParams.NewsDeskValues.add("Fashion");
+        }
+        if(checkBoxSports.isChecked()) {
+            searchParams.NewsDeskValues.add("Sports");
+        }
+
 
         Listener.onFinishSettingParamsDialog(searchParams);
         dismiss();
