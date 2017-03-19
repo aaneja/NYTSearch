@@ -1,12 +1,10 @@
 package com.codepath.aaneja.nytsearch;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -15,10 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.codepath.aaneja.nytsearch.adapters.DocAdapter;
 import com.codepath.aaneja.nytsearch.helpers.ItemClickSupport;
+import com.codepath.aaneja.nytsearch.helpers.SpacesItemDecoration;
 import com.codepath.aaneja.nytsearch.models.Doc;
 import com.codepath.aaneja.nytsearch.models.SearchParams;
 import com.codepath.aaneja.nytsearch.services.NYTArticleSearch;
@@ -38,7 +36,6 @@ public class LandingActivity extends AppCompatActivity implements SetSearchFilte
 
     @Override
     public void onFinishSettingParamsDialog(SearchParams searchParams) {
-        Toast.makeText(this, searchParams.SortOrder, Toast.LENGTH_SHORT).show();
         this.searchParams = searchParams;
         onSearchButtonClick(null);
     }
@@ -79,8 +76,6 @@ public class LandingActivity extends AppCompatActivity implements SetSearchFilte
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         rvArticles.setLayoutManager(layoutManager);
 
-        getSearchDocsUpdateTask().execute(searchParams);
-
         endlessRecyclerViewScrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
@@ -90,6 +85,7 @@ public class LandingActivity extends AppCompatActivity implements SetSearchFilte
                 getSearchDocsUpdateTask().execute(searchParams);
             }
         };
+        rvArticles.addOnScrollListener(endlessRecyclerViewScrollListener);
 
         ItemClickSupport.addTo(rvArticles).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
@@ -105,8 +101,9 @@ public class LandingActivity extends AppCompatActivity implements SetSearchFilte
             }
         });
 
-        rvArticles.addOnScrollListener(endlessRecyclerViewScrollListener);
+        rvArticles.addItemDecoration(new SpacesItemDecoration(5));
 
+        getSearchDocsUpdateTask().execute(searchParams);
     }
 
     @NonNull
