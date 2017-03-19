@@ -69,5 +69,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:id="@+id/checkBoxSports" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <Button
+        android:text="DONE"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnDone" />
 
 </LinearLayout>

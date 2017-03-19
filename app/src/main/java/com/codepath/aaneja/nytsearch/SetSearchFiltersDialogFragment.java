@@ -10,12 +10,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.codepath.aaneja.nytsearch.models.SearchParams;
 
 import java.text.SimpleDateFormat;
+
+import static android.R.attr.value;
 
 /**
  * Created by aaneja on 18/03/17.
@@ -25,6 +29,8 @@ public class SetSearchFiltersDialogFragment extends DialogFragment  {
 
     //The instance we'll use while the Fragment is active. When the fragment is 'done', this is what we'll parcel back to the calling activity
     private SearchParams searchParams;
+    private EditText etBeginDate;
+    private Spinner spinnerSortOrder;
 
     public SetSearchFiltersDialogFragment() {
     }
@@ -48,26 +54,68 @@ public class SetSearchFiltersDialogFragment extends DialogFragment  {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //Since the button is on a fragment, we need to bind the listner using code
+        final Button btnDone = (Button) view.findViewById(R.id.btnDone);
+        btnDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDoneButtonClick(v);
+            }
+        });
+
         //Set the passed in searchParams to our class instance
         this.searchParams = getArguments().getParcelable("searchParams");
-
         SetViewUsingSearchParams(view);
     }
 
     private void SetViewUsingSearchParams(View view) {
-        final EditText etBeginDate = (EditText) view.findViewById(R.id.etBeginDate);
+        etBeginDate = (EditText) view.findViewById(R.id.etBeginDate);
 
         if(searchParams.BeginDate != null) {
             etBeginDate.setText(new SimpleDateFormat("MM-dd-yyyy").format(searchParams.BeginDate));
         }
 
-        final Spinner spinnerSortOrder = (Spinner) view.findViewById(R.id.spinnerSortOrder);
+        spinnerSortOrder = (Spinner) view.findViewById(R.id.spinnerSortOrder);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),R.array.sortOrder_array, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinnerSortOrder.setAdapter(adapter);
+        //Set the passed in searchParams position
+        for (int position = 0; position < adapter.getCount(); position++) {
+            if(searchParams.SortOrder.compareToIgnoreCase(adapter.getItem(position).toString()) ==0 ) {
+                spinnerSortOrder.setSelection(position);
+            }
+        }
+
+    }
+
+    public SetSearchFiltersDialogFragmentListener Listener = null;
+
+    public interface SetSearchFiltersDialogFragmentListener {
+        void onFinishSettingParamsDialog(SearchParams searchParams);
+    }
+
+    public void onDoneButtonClick(View view) {
+
+        String sortOrder = spinnerSortOrder.getSelectedItem().toString();
+        switch (sortOrder) {
+            case "None" :
+                searchParams.SortOrder = "";
+                break;
+            case "Oldest" :
+                searchParams.SortOrder = "oldest";
+                break;
+            case "Newest" :
+                searchParams.SortOrder = "newest";
+        }
+
+        if(Listener != null) {
+            Listener.onFinishSettingParamsDialog(searchParams);
+        }
+
+        dismiss();
 
     }
 }

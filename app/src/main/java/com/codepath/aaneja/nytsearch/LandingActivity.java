@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.codepath.aaneja.nytsearch.adapters.DocAdapter;
 import com.codepath.aaneja.nytsearch.models.Doc;
@@ -26,12 +27,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class LandingActivity extends AppCompatActivity {
-
+public class LandingActivity extends AppCompatActivity implements SetSearchFiltersDialogFragment.SetSearchFiltersDialogFragmentListener {
     private List<Doc> searchedDocs = new ArrayList<>(10);
     private DocAdapter docAdapter = new  DocAdapter(searchedDocs);
     public SearchParams searchParams = new SearchParams();
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
+
+    @Override
+    public void onFinishSettingParamsDialog(SearchParams searchParams) {
+        Toast.makeText(this, searchParams.SortOrder, Toast.LENGTH_SHORT).show();
+        this.searchParams = searchParams;
+        getSearchDocsUpdateTask().execute(searchParams);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,8 +60,8 @@ public class LandingActivity extends AppCompatActivity {
 
     private void CreateSeachFilterDialog() {
         SetSearchFiltersDialogFragment setSearchParams = SetSearchFiltersDialogFragment.newInstance(searchParams);
+        setSearchParams.Listener = this;
         setSearchParams.show(getSupportFragmentManager(),"fm_set_searchParams");
-
 
     }
 
