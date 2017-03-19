@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">NYT Search</string>
     <string-array name="sortOrder_array">
+        <item>None</item>
         <item>Oldest</item>
         <item>Newest</item>
     </string-array>

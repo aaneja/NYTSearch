@@ -15,7 +15,7 @@ public class SearchParams implements Parcelable {
 
     public String SearchTerm = "";
     public Date BeginDate;
-    public String SortOrder; //oldest, newest, <not-applied>
+    public String SortOrder = ""; //oldest, newest, <not-applied>
     public List<String> NewsDeskValues;
 
     @Override

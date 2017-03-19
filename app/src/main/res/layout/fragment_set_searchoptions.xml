@@ -56,18 +56,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:id="@+id/checkBox1" />
+        android:id="@+id/checkBoxArts" />
     <CheckBox
         android:text="Fashion &amp; Style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:id="@+id/checkBox2" />
+        android:id="@+id/checkBoxFashion" />
     <CheckBox
-        android:text="Sport"
+        android:text="Sports"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:id="@+id/checkBox3" />
+        android:id="@+id/checkBoxSports" />
 
 </LinearLayout>

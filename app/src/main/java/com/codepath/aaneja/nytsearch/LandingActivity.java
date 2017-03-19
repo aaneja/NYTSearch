@@ -30,7 +30,7 @@ public class LandingActivity extends AppCompatActivity {
 
     private List<Doc> searchedDocs = new ArrayList<>(10);
     private DocAdapter docAdapter = new  DocAdapter(searchedDocs);
-    private SearchParams searchParams = new SearchParams();
+    public SearchParams searchParams = new SearchParams();
     private EndlessRecyclerViewScrollListener endlessRecyclerViewScrollListener;
 
     @Override
@@ -52,10 +52,9 @@ public class LandingActivity extends AppCompatActivity {
     }
 
     private void CreateSeachFilterDialog() {
-        Intent data = new Intent();
-        data.putExtra("searchParams", searchParams);
-        Fragment setSearchParams = SetSearchFiltersDialogFragment.instantiate(this, "searchParams");
-        setSearchParams.startActivity(data);
+        SetSearchFiltersDialogFragment setSearchParams = SetSearchFiltersDialogFragment.newInstance(searchParams);
+        setSearchParams.show(getSupportFragmentManager(),"fm_set_searchParams");
+
 
     }
 
