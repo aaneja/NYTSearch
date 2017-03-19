@@ -1,8 +1,10 @@
 package com.codepath.aaneja.nytsearch;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -42,14 +44,18 @@ public class LandingActivity extends AppCompatActivity {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
             case R.id.miSearchFilters:
-                createSeachFilterDialog();
+                CreateSeachFilterDialog();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void createSeachFilterDialog() {
+    private void CreateSeachFilterDialog() {
+        Intent data = new Intent();
+        data.putExtra("searchParams", searchParams);
+        Fragment setSearchParams = SetSearchFiltersDialogFragment.instantiate(this, "searchParams");
+        setSearchParams.startActivity(data);
 
     }
 
