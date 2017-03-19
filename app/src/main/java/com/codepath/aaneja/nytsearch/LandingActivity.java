@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -101,6 +102,8 @@ public class LandingActivity extends AppCompatActivity implements SetSearchFilte
             }
         });
 
+//        rvArticles.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+//        rvArticles.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
         rvArticles.addItemDecoration(new SpacesItemDecoration(5));
 
         getSearchDocsUpdateTask().execute(searchParams);
