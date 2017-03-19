@@ -1,5 +1,7 @@
 package com.codepath.aaneja.nytsearch.services;
 
+import android.util.Log;
+
 import com.codepath.aaneja.nytsearch.models.ArticleSearchResponse;
 import com.codepath.aaneja.nytsearch.models.Doc;
 import com.codepath.aaneja.nytsearch.models.SearchParams;
@@ -55,6 +57,7 @@ public class NYTArticleSearch {
         }
 
         String url = urlBuilder.build().toString();
+        Log.i("SEARCH_URL",url);
 
         Request request = new Request.Builder()
                 .url(url)

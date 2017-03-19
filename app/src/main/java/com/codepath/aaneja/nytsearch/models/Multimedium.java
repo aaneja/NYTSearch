@@ -18,9 +18,10 @@ public class Multimedium {
     @SerializedName("subtype")
     @Expose
     public String subtype;
-    @SerializedName("legacy")
+    // Ignoring this field because it was causing issues
+   /* @SerializedName("legacy")
     @Expose
-    public Legacy legacy;
+    public Legacy legacy;*/
     @SerializedName("type")
     @Expose
     public String type;

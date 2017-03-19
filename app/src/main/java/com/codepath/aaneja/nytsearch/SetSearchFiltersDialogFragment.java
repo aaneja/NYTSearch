@@ -1,11 +1,8 @@
 package com.codepath.aaneja.nytsearch;
 
-import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.codepath.aaneja.nytsearch.models.SearchParams;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
-import static android.R.attr.value;
 
 /**
  * Created by aaneja on 18/03/17.
@@ -27,6 +22,7 @@ import static android.R.attr.value;
 
 public class SetSearchFiltersDialogFragment extends DialogFragment  {
 
+    public static final SimpleDateFormat displayDateFormat = new SimpleDateFormat("MM/dd/yyyy");
     //The instance we'll use while the Fragment is active. When the fragment is 'done', this is what we'll parcel back to the calling activity
     private SearchParams searchParams;
     private EditText etBeginDate;
@@ -72,7 +68,7 @@ public class SetSearchFiltersDialogFragment extends DialogFragment  {
         etBeginDate = (EditText) view.findViewById(R.id.etBeginDate);
 
         if(searchParams.BeginDate != null) {
-            etBeginDate.setText(new SimpleDateFormat("MM-dd-yyyy").format(searchParams.BeginDate));
+            etBeginDate.setText(displayDateFormat.format(searchParams.BeginDate));
         }
 
         spinnerSortOrder = (Spinner) view.findViewById(R.id.spinnerSortOrder);
@@ -84,7 +80,7 @@ public class SetSearchFiltersDialogFragment extends DialogFragment  {
         spinnerSortOrder.setAdapter(adapter);
         //Set the passed in searchParams position
         for (int position = 0; position < adapter.getCount(); position++) {
-            if(searchParams.SortOrder.compareToIgnoreCase(adapter.getItem(position).toString()) ==0 ) {
+            if(searchParams.SortOrder.compareToIgnoreCase(adapter.getItem(position).toString()) == 0 ) {
                 spinnerSortOrder.setSelection(position);
             }
         }
@@ -99,6 +95,21 @@ public class SetSearchFiltersDialogFragment extends DialogFragment  {
 
     public void onDoneButtonClick(View view) {
 
+        if(Listener == null) {
+            //No listener for the new searchParams, so dismiss the dialog
+            dismiss();
+            return;
+        }
+
+        //Parse and set BeginDate if valid
+        //TODO: Replace whole flow with a DateDialogFrament and a TextView instead of an EditView
+        try {
+            searchParams.BeginDate = displayDateFormat.parse(etBeginDate.getText().toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        //Set the sortOrder if it's not 'None'
         String sortOrder = spinnerSortOrder.getSelectedItem().toString();
         switch (sortOrder) {
             case "None" :
@@ -111,10 +122,7 @@ public class SetSearchFiltersDialogFragment extends DialogFragment  {
                 searchParams.SortOrder = "newest";
         }
 
-        if(Listener != null) {
-            Listener.onFinishSettingParamsDialog(searchParams);
-        }
-
+        Listener.onFinishSettingParamsDialog(searchParams);
         dismiss();
 
     }

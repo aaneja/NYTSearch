@@ -37,7 +37,7 @@ public class LandingActivity extends AppCompatActivity implements SetSearchFilte
     public void onFinishSettingParamsDialog(SearchParams searchParams) {
         Toast.makeText(this, searchParams.SortOrder, Toast.LENGTH_SHORT).show();
         this.searchParams = searchParams;
-        getSearchDocsUpdateTask().execute(searchParams);
+        onSearchButtonClick(null);
     }
 
     @Override
@@ -65,9 +65,6 @@ public class LandingActivity extends AppCompatActivity implements SetSearchFilte
 
     }
 
-    private void setSearchFiltersAndApply() {
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,10 +141,6 @@ public class LandingActivity extends AppCompatActivity implements SetSearchFilte
     public void onSearchButtonClick(View view) {
         EditText etSearch = (EditText) findViewById(R.id.etSearch);
         String newSearchTerm =  etSearch.getText().toString();
-        if(newSearchTerm.compareToIgnoreCase(searchParams.SearchTerm) == 0) {
-            //Same search again, do nothing
-            return;
-        }
 
         //Begin a new search for this new term
         endlessRecyclerViewScrollListener.resetState();
