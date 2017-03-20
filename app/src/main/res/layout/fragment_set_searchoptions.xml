@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="@dimen/fragmentWidth"
+    android:orientation="vertical" android:layout_width="300dp"
     android:layout_gravity="center" android:layout_height="match_parent">
 
     <TextView
@@ -9,9 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:id="@+id/tvBeginDate" />
+        android:id="@+id/tvBeginDateLabel" />
 
-    <EditText
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="date"
@@ -19,7 +19,9 @@
         android:gravity="center"
         android:layout_gravity="center"
         android:ems="10"
-        android:id="@+id/etBeginDate" />
+        android:id="@+id/tvBeginDate"
+        android:textSize="20sp"
+        android:textColor="@android:color/holo_blue_dark" />
 
     <Space
         android:layout_width="match_parent"

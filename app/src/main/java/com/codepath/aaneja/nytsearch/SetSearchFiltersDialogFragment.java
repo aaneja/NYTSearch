@@ -1,5 +1,6 @@
 package com.codepath.aaneja.nytsearch;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -10,25 +11,28 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.DatePicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.codepath.aaneja.nytsearch.helpers.DatePickerFragment;
 import com.codepath.aaneja.nytsearch.models.SearchParams;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by aaneja on 18/03/17.
  */
 
-public class SetSearchFiltersDialogFragment extends DialogFragment  {
+public class SetSearchFiltersDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener  {
 
     public static final SimpleDateFormat displayDateFormat = new SimpleDateFormat("MM/dd/yyyy");
     //The instance we'll use while the Fragment is active. When the fragment is 'done', this is what we'll parcel back to the calling activity
     private SearchParams searchParams;
-    private EditText etBeginDate;
+    private TextView tvBeginDate;
     private Spinner spinnerSortOrder;
     private CheckBox checkBoxArts;
     private CheckBox checkBoxFashion;
@@ -71,10 +75,23 @@ public class SetSearchFiltersDialogFragment extends DialogFragment  {
     }
 
     private void SetViewUsingSearchParams(View view) {
-        etBeginDate = (EditText) view.findViewById(R.id.etBeginDate);
+        tvBeginDate = (TextView) view.findViewById(R.id.tvBeginDate);
         if(searchParams.BeginDate != null) {
-            etBeginDate.setText(displayDateFormat.format(searchParams.BeginDate));
+            tvBeginDate.setText(displayDateFormat.format(searchParams.BeginDate));
         }
+        tvBeginDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDatePickerDialog(v);
+            }
+        });
+        tvBeginDate.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                tvBeginDate.setText("");
+                return true;
+            }
+        });
 
         spinnerSortOrder = (Spinner) view.findViewById(R.id.spinnerSortOrder);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -128,9 +145,8 @@ public class SetSearchFiltersDialogFragment extends DialogFragment  {
         }
 
         //Parse and set BeginDate if valid
-        //TODO: Replace whole flow with a DateDialogFrament and a TextView instead of an EditView
         try {
-            searchParams.BeginDate = displayDateFormat.parse(etBeginDate.getText().toString());
+            searchParams.BeginDate = displayDateFormat.parse(tvBeginDate.getText().toString());
         } catch (ParseException e) {
             Log.w("SEARCHPARAMS/Date",e.getMessage());
             searchParams.BeginDate = null;
@@ -166,4 +182,25 @@ public class SetSearchFiltersDialogFragment extends DialogFragment  {
         dismiss();
 
     }
+
+    public void showDatePickerDialog(View v) {
+        DatePickerFragment dpFrag = new DatePickerFragment();
+        dpFrag.setOnDateSetListener(this);
+        dpFrag.show(getFragmentManager(), "datePicker");
+    }
+
+    // handle the date selected
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        // store the values selected into a Calendar instance
+        final Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, monthOfYear);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+//        TextView tvEditDate = (TextView) findViewById(R.id.tvEditDate);
+        tvBeginDate.setText(displayDateFormat.format(c.getTime()));
+    }
+
+
 }
