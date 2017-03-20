@@ -56,7 +56,7 @@ Describe any challenges encountered while building the app.
 
 ## Open-source libraries used
 
-- [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
+- [Ok Http](https://corner.squareup.com/2014/04/okio.html) - OkIo lib from Square
 - [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
 
 ## License

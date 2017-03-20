@@ -125,6 +125,7 @@ public class LandingActivity extends AppCompatActivity implements SetSearchFilte
     private AsyncTask<SearchParams, Integer, List<Doc>> getSearchDocsUpdateTask() {
         return new AsyncTask<SearchParams, Integer, List<Doc>>() {
 
+            private String errorMessage = "";
             private boolean AppendToResults;
             private final NYTArticleSearch nytArticleSearch = new NYTArticleSearch();
 
@@ -143,7 +144,7 @@ public class LandingActivity extends AppCompatActivity implements SetSearchFilte
                     searchedDocsNew = nytArticleSearch.GetArticles(searchItem[0]);
                     Log.i("FETCHED SUCCESSFULLY", String.valueOf(searchedDocsNew.size()));
                 } catch (IOException | JSONException e) {
-                    e.printStackTrace();
+                    errorMessage = e.getMessage();
                 }
 
                 return searchedDocsNew;
@@ -151,6 +152,14 @@ public class LandingActivity extends AppCompatActivity implements SetSearchFilte
 
             @Override
             protected void onPostExecute(List<Doc> newResults) {
+                if(!errorMessage.isEmpty()) {
+                    //Toast works here because this method executes on the Main thread
+                    Toast.makeText(LandingActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                    Toast.makeText(LandingActivity.this, "Re-Search in a few seconds to fix", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+
                 if(AppendToResults) {
                     int beforeAddNewCount = searchedDocs.size();
                     searchedDocs.addAll(newResults);
