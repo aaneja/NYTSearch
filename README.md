@@ -2,7 +2,7 @@
 
 **Name of your app** is an android app that allows a user to search for articles on web using simple filters. The app utilizes [New York Times Search API](http://developer.nytimes.com/docs/read/article_search_api_v2).
 
-Time spent: **11** hours spent in total
+Time spent: **12.5** hours spent in total
 
 ## User Stories
 
@@ -46,7 +46,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories. [Direct Imgur link](http://i.imgur.com/95krYGp.gif) here since github blocks bigger gifs.
 
-<img src='http://i.imgur.com/95krYGp.gif' title='Potrait and landsapce walkthru' width='320' height='569' alt='Potrait and landsapce walkthru' />
+<img src='http://i.imgur.com/95krYGp.gif' title='Potrait walkthru' width='320' height='569' alt='Potrait and landsapce walkthru' />
 
 GIF created with [FFmpeg](https://ffmpeg.zeranoe.com/builds/).
 
