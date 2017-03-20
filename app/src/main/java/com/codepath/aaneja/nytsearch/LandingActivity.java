@@ -14,9 +14,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.codepath.aaneja.nytsearch.adapters.DocAdapter;
 import com.codepath.aaneja.nytsearch.helpers.ItemClickSupport;
+import com.codepath.aaneja.nytsearch.helpers.NetworkInfo;
 import com.codepath.aaneja.nytsearch.helpers.SpacesItemDecoration;
 import com.codepath.aaneja.nytsearch.models.Doc;
 import com.codepath.aaneja.nytsearch.models.SearchParams;
@@ -106,7 +108,17 @@ public class LandingActivity extends AppCompatActivity implements SetSearchFilte
 //        rvArticles.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL));
         rvArticles.addItemDecoration(new SpacesItemDecoration(5));
 
-        getSearchDocsUpdateTask().execute(searchParams);
+        //Before first execute, check and report if network is up
+        if(!NetworkInfo.isNetworkAvailable(this)) {
+            Toast.makeText(this, "Network Unavailable", Toast.LENGTH_SHORT).show();
+        }
+        else
+        if(!NetworkInfo.isOnline()) {
+            Toast.makeText(this, "No internet connection!", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            getSearchDocsUpdateTask().execute(searchParams);
+        }
     }
 
     @NonNull
