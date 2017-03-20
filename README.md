@@ -44,11 +44,12 @@ The following **additional** features are implemented:
 
 ## Video Walkthrough
 
-Here's a walkthrough of implemented user stories:
+Here's a walkthrough of implemented user stories. [Direct Imgur link](http://i.imgur.com/95krYGp.gif) here since github blocks bigger gifs.
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/95krYGp.gif' title='Potrait and landsapce walkthru' width='320' height='569' alt='Potrait and landsapce walkthru' />
 
-GIF created with [LiceCap](http://www.cockos.com/licecap/).
+GIF created with [FFmpeg](https://ffmpeg.zeranoe.com/builds/).
+
 
 ## Notes
 
